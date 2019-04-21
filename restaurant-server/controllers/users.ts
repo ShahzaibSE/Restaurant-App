@@ -12,10 +12,37 @@ var userModel: mongoose.Schema = new mongoose.Schema({
     updatedAt: Date
 })
 
-class UserController {
-    createUser() {
+export class UserController{
+    user_route = express.Router()
+    createUser(req: express.Request, res: express.Response) {
         var newUserModel = mongoose.model("users", userModel)
-        var newUserDocument = new newUserModel({})
+        this.user_route.post("/user/create",(req,res)=>{
+            var body = req.body
+            var newUserDocument = new newUserModel({
+                firstname: body.firstname,
+                lastname: body.lastname,
+                email: body.email,
+                password: body.password,
+                createdAt: new Date().toISOString()
+            })
+            newUserModel.findOne({email:body.email}).exec((data,err)=>{
+                if (err) {
+                    res.send({
+                        status: false,
+                        resCode: 400,
+                        isError: true,
+                        message: "Internal server error while fetching user."
+                    })
+                }else if (data) {
+                    res.send({
+                        status: true,
+                        resCode: 200,
+                        isError: false,
+                        message: "User already exists."
+                    })
+                }
+            })
+        })
     }
 
     getUser() {
