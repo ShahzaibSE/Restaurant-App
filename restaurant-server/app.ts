@@ -2,16 +2,18 @@ import * as express from "express"
 import * as bodyParser from "body-parser"
 import * as mongoose from "mongoose"
 
-// Controllers.
-import * as userController from './controllers/users'
+// Routes.
+import * as userRoutes from "./routes/users"
 
 // var app = express()
 
 class App {
     public app: express.Application
+    public user_routes: userRoutes.UserRoutes = new userRoutes.UserRoutes()
     constructor() {
         this.app = express()
-        this.config();        
+        this.config()
+        this.user_routes.routes(this.app)     
     }
 
     private config(): void{
