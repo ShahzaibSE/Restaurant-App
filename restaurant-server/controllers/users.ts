@@ -2,7 +2,8 @@ import * as express from 'express'
 import * as mongoose from 'mongoose' 
 import { createSecureServer } from 'http2';
 
-var userModel: mongoose.Schema = new mongoose.Schema({
+var userSchema: mongoose.Schema = new mongoose.Schema({
+    _id:mongoose.Schema.Types.ObjectId,
     firstname: String,
     lastname: String,
     dateofbirth: String,
@@ -46,8 +47,38 @@ export class UserController{
     //     })
     // }
 
-    createUser(){
-        
+    public createUser(req: express.Request, res: express.Response){
+        var body = req.body
+        var userModel = mongoose.model("user",userSchema)
+        userModel.findOne({email:req.body.email}).exec((err,data)=>{
+            if (err) {
+                res.send({
+                    status: false,
+                    resCode: 500,
+                    isError: true,
+                    message: "Internal server error."
+                })
+            }else if(data) {
+                res.send({
+                    status: true,
+                    resCode: 201,
+                    isError: false,
+                    message: "User already exists."
+                })
+            }else {
+                // -- Create User -- //
+                var new_user = new userModel(body)
+                new_user.save((err,data)=>{
+                    res.send({
+                        status: true,
+                        resCode: 200,
+                        isError: false,
+                        message: "User created successfully"
+                    })
+                })
+
+            }
+        })
     }
 
     getUser() {

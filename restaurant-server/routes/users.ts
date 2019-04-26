@@ -1,9 +1,10 @@
 import * as express from 'express'
 
 // Controllers.
-import * as userController from "./../controllers/users"
+import {UserController} from "./../controllers/users"
 
 export class UserRoutes {
+    public userController = new UserController()
     constructor() {
         
     }
@@ -13,6 +14,7 @@ export class UserRoutes {
             res.status(200).send({
                 message: 'GET request successfulll!!!!'
             })
-        })               
+        })      
+        app.route("/user/create").post(this.userController.createUser)         
     }
 }
