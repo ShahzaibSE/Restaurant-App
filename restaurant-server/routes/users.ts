@@ -1,20 +1,34 @@
-// import * as express from 'express'
+import {Request, Response} from "express";
+import {UserController} from "./../controllers/user-controller"
 
-// // Controllers.
-// import {UserController} from "./../controllers/users"
-
-// export class UserRoutes {
-//     public userController = new UserController()
-//     constructor() {
-        
-//     }
-//     public routes(app: express.Application): void {          
-//         app.route('/')
-//         .get((req: express.Request, res: express.Response) => {            
-//             res.status(200).send({
-//                 message: 'GET request successfulll!!!!'
-//             })
-//         })      
-//         app.route("/user/create").post(this.userController.createUser)         
-//     }
-// }
+export class UserRoutes {      
+    public userController = new UserController()
+    public routes(app): void {          
+        app.route('/user')
+        .get((req: Request, res: Response) => {            
+            res.status(200).send({
+                status: true,
+                resCode: 200,
+                isError: false,
+                message: "User fetched successfully"
+            })
+        }).post(this.userController.addNewContact)  // Adding user
+          
+        // Edit user.
+        app.route("/user/:uid").put((req: Request, res: Response) => {
+            res.status(201).send({
+                status: true,
+                resCode: 201,
+                isError: false,
+                message: "User updated successfully"
+            })
+        }).delete((req: Request, res: Response) => {
+            res.status(202).send({
+                status: true,
+                resCode: 201,
+                isError: false,
+                message: "User deleted successfully"
+            })
+        })
+    }
+}

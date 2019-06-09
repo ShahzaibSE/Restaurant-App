@@ -4,14 +4,14 @@ const express = require("express");
 const bodyParser = require("body-parser");
 // import * as mongoose from "mongoose"
 // Routes.
-// import * as userRoutes from "./routes/users"
+const users_1 = require("./routes/users");
 // var app = express()
 class App {
-    // public user_routes: userRoutes.UserRoutes = new userRoutes.UserRoutes()
     constructor() {
+        this.user_routes = new users_1.userRoutes();
         this.app = express();
         this.config();
-        // this.user_routes.routes(this.app)     
+        this.user_routes.routes(this.app);
     }
     config() {
         // support application/json type post data
