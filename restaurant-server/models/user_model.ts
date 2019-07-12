@@ -25,3 +25,16 @@ export const UserSchema = new Schema({
         default: Date.now
     }
 });
+
+export const SessionSchema = new Schema({
+    email: {
+        type: String            
+    },
+    signed_token: {
+        type: String
+    },
+    created_date: {
+        type: Date,
+        default: Date.now
+    }
+})
