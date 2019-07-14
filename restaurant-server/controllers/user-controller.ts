@@ -8,7 +8,7 @@ const Session = mongoose.model("session", SessionSchema)
 
 export class UserController{
 
-    public addNewContact (req: Request, res: Response) {                
+    public addNewContact (req: Request, res: Response) {       // -- Test Function -- //         
             let newUser = new User(req.body);
         
             newUser.save((err, contact) => {
@@ -87,4 +87,46 @@ export class UserController{
                 }
         })
     }    
+    // Delete User created 13/July/2019 - 7:13PM -- //
+    public delete(req: Request, res: Response) {
+        var body = req.body
+        User.remove({email: body.email}).exec((err, data)=>{
+            if (err) {
+                res.send({
+                    status: false,
+                    resCode: 500,
+                    isError: true,
+                    message: "Internal server error, could not complete operation."
+                })
+            }else if(data){
+                res.send({
+                    status: true,
+                    resCode: 200,
+                    isError: false,
+                    message: "User deleted successfully."
+                })
+            }
+        })
+    }
+    // Update User created 14/July/2019 - 3:26 PM -- //
+    public update(req: Request, res: Response){
+        var body = req.body
+        User.update({email: body.email},{firstname: body.firstname, lastname: body.lastname, phone: body.phone}).exec((err, is_user_update)=>{
+            if (err) {
+                res.send({
+                    status: false,
+                    resCode: 500,
+                    isError: true,
+                    message: "Internal server error, operation could not be completed."
+                })
+            }else if(is_user_update){
+                res.send({
+                    status: true,
+                    resCode: 200,
+                    isError: false,
+                    message: "User updated successfully."
+                })
+            }
+        })
+    }
 }
